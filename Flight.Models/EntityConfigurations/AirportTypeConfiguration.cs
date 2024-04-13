@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Flight.Models.EnityConfigurations
+namespace Flight.Models.EntityConfigurations
 {
     internal class AirportTypeConfiguration : IEntityTypeConfiguration<Airport>
     {

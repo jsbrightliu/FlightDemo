@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Flight.Migrations
 {
     [DbContext(typeof(FlightContext))]
-    [Migration("20240413024511_Initial_Airport")]
-    partial class Initial_Airport
+    [Migration("20240413122940_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

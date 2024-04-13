@@ -1,9 +1,9 @@
-﻿using AutoMapper;
-using Flight.Services;
+using AutoMapper;
+using Flight.IServices;
 using Flight.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Flight.Controllers
+namespace Flight.Api
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -18,6 +18,7 @@ namespace Flight.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet]
         public async Task<AirportDto> Index([FromQuery] int id)
         {
             var airport = await _airPortService.GetAsync(id);
@@ -26,5 +27,6 @@ namespace Flight.Controllers
 
             return dto;
         }
+
     }
 }
