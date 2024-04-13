@@ -1,0 +1,100 @@
+﻿@{
+    ViewBag.Title = "Airport";
+    Layout = "_Layout";
+}
+
+<table id="dg" title="Airports" class="easyui-datagrid" style="width:700px;height:250px"
+        url="/api/airport" method="GET"
+        toolbar="#toolbar" pagination="true"
+        rownumbers="true" fitColumns="true" singleSelect="true">
+    <thead>
+        <tr>
+            <th field="code" width="50">Code</th>
+            <th field="name" width="50">Name</th>
+        </tr>
+    </thead>
+</table>
+<div id="toolbar">
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="create()">Create</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="edit()">Edit</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroy()">Remove</a>
+</div>
+
+<div id="dlg" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+    <form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
+        <h3>Airport Information</h3>
+        <div style="margin-bottom:10px">
+            <input name="code" class="easyui-textbox" required="true" label="Code:" style="width:100%">
+        </div>
+        <div style="margin-bottom:10px">
+            <input name="name" class="easyui-textbox" required="true" label="Name:" style="width:100%">
+        </div>
+    </form>
+</div>
+<div id="dlg-buttons">
+    <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="save()" style="width:90px">Save</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+    var url;
+    function create(){
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle','New Airport');
+        $('#fm').form('clear');
+        url = '/api/airport/0';
+    }
+    
+    function edit(){
+        var row = $('#dg').datagrid('getSelected');
+        if (row){
+            $('#dlg').dialog('open').dialog('center').dialog('setTitle','Edit Airport');
+            $('#fm').form('load',row);
+            url = '/api/airport/'+row.id;
+        }
+    }
+    
+    function save(){
+        $('#fm').form('submit',{
+            url: url,
+            iframe: false,
+            onSubmit: function(){
+                return $(this).form('validate');
+            },
+            success: function(res){
+                var result = eval('('+res+')')
+                if (result.success){
+                    $('#dlg').dialog('close');        // close the dialog
+                    $('#dg').datagrid('reload');    // reload the user data
+                }
+                else{
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                }
+            }
+        });
+    }
+    function destroy(){
+        var row = $('#dg').datagrid('getSelected');
+        if (row){
+            $.messager.confirm('Confirm','Are you sure you want to destroy this Airport?',function(r){
+                if (r){
+                    $.delete('/api/airport/'+row.id,function(result){
+                        if (result.success){
+                            $('#dg').datagrid('reload');    // reload the user data
+                        } else {
+                            $.messager.show({    // show error message
+                                title: 'Error',
+                                msg: result.errorMsg
+                            });
+                        }
+                    },'json');
+                }
+            });
+        }
+    }
+</script>
+}

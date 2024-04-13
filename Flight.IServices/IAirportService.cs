@@ -12,6 +12,8 @@ namespace Flight.IServices
 
         Task DeleteAsync(int id);
 
-        Task<IList<Airport>> GetListAsync(string code);
+        Task<IList<Airport>> GetPagedListAsync(int page, int rows);
+
+        Task<int> CountAsync();
     }
 }

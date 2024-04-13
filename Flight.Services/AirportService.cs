@@ -36,9 +36,15 @@ namespace Flight.Services
             return airport;
         }
 
-        public async Task<IList<Airport>> GetListAsync(string code)
+        public async Task<IList<Airport>> GetPagedListAsync(int page, int rows)
         {
-            return await _context.Airports.Where(p => p.Code == code).ToListAsync();
+            var start = (page - 1) * rows;
+            return await _context.Airports.Skip(start).Take(rows).ToListAsync();
+        }
+
+        public async Task<int> CountAsync()
+        {
+            return await _context.Airports.CountAsync();
         }
 
         public async Task UpdateAsync(Airport airport)
